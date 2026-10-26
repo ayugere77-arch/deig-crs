@@ -5,7 +5,7 @@ import { createServer as createViteServer } from "vite";
 import path from "path";
 import { db, connection, checkConnection } from "./src/db";
 import { initDatabaseTables } from "./src/db/init";
-import { reports, categories, industries, departments } from "./src/db/schema";
+import { reports, categories, industries, departments, users } from "./src/db/schema";
 import { eq, count, sql } from "drizzle-orm";
 
 async function seedInitialData() {
@@ -42,6 +42,16 @@ async function seedInitialData() {
         { name: 'Legal & Compliance' },
       ]);
       console.log('Seed departments added');
+    }
+
+    const existingUsers = await db.select().from(users).limit(1);
+    if (existingUsers.length === 0) {
+      await db.insert(users).values([
+        { name: 'Federal Inspector', email: 'admin@deig.gov.et', password: 'admin123', role: 'Administrator' },
+        { name: 'Lead Investigator', email: 'investigator@deig.gov.et', password: 'investigator123', role: 'Investigator' },
+        { name: 'Integrity Analyst', email: 'analyst@deig.gov.et', password: 'analyst123', role: 'Analyst' }
+      ]);
+      console.log('Seed users added');
     }
   } catch (error) {
     console.error('Seeding failed:', error);
@@ -93,17 +103,29 @@ async function startServer() {
     try {
       const { email, password } = req.body;
 
-      // Hardcoded super-admin for initial setup/demo
+      // Built-in accounts (accessible in both connected & fallback modes)
       if (email === "admin@deig.gov.et" && password === "admin123") {
         return res.json({ 
           token: "mock-jwt-token", 
           user: { name: "Federal Inspector", role: "Administrator", email } 
         });
       }
+      if (email === "investigator@deig.gov.et" && password === "investigator123") {
+        return res.json({ 
+          token: "mock-jwt-token", 
+          user: { name: "Lead Investigator", role: "Investigator", email } 
+        });
+      }
+      if (email === "analyst@deig.gov.et" && password === "analyst123") {
+        return res.json({ 
+          token: "mock-jwt-token", 
+          user: { name: "Integrity Analyst", role: "Analyst", email } 
+        });
+      }
 
-      if (!db) return res.status(503).json({ error: "Database not connected. Please set DATABASE_URL." });
+      if (!db) return res.status(401).json({ error: "Invalid credentials" });
 
-      // In production, use bcrypt.compare
+      // Check database for any registered user
       const user = await db.query.users.findFirst({
         where: (users, { eq }) => eq(users.email, email)
       });
