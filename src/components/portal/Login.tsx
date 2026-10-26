@@ -83,6 +83,37 @@ export default function Login({ onLogin }: LoginProps) {
           </button>
         </form>
 
+        {/* Quick Demo Credentials */}
+        <div className="mt-6 pt-6 border-t border-gray-100">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-3 text-center">Demo Staff Accounts (Click to Autofill)</p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('admin@deig.gov.et');
+                setPassword('admin123');
+              }}
+              className="p-2.5 text-left bg-gray-50 hover:bg-gray-100 border border-gray-200/60 rounded-xl transition-colors cursor-pointer"
+            >
+              <div className="text-[11px] font-bold text-gray-800">Federal Inspector</div>
+              <div className="text-[10px] text-gray-500 font-mono truncate">admin@deig.gov.et</div>
+              <div className="text-[9px] text-brand font-medium">Role: Admin</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail('investigator@deig.gov.et');
+                setPassword('investigator123');
+              }}
+              className="p-2.5 text-left bg-gray-50 hover:bg-gray-100 border border-gray-200/60 rounded-xl transition-colors cursor-pointer"
+            >
+              <div className="text-[11px] font-bold text-gray-800">Lead Investigator</div>
+              <div className="text-[10px] text-gray-500 font-mono truncate">investigator@deig.gov.et</div>
+              <div className="text-[9px] text-emerald-600 font-medium">Role: Investigator</div>
+            </button>
+          </div>
+        </div>
+
         <div className="mt-8 text-center">
           <p className="text-[10px] text-gray-400 uppercase tracking-widest leading-relaxed">
             {t('unauthorizedWarning')}
