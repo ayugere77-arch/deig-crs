@@ -1,0 +1,14 @@
+{
+  "name": "DEIG CRS",
+  "description": "An advanced, multilingual corruption reporting portal with anonymous filing, case tracking, and investigator dashboards.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API",
+    "Reporting",
+    "Analytics",
+    "Case Management"
+  ]
+}

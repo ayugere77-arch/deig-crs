@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --brand-blue: #1172ba;
+  --brand-green: #006937;
+  
+  --color-brand: var(--brand-blue);
+  --color-brand-dark: #0f172a;
+  --color-accent: #f59e0b;
+  --color-brand-muted: rgba(17, 114, 186, 0.05);
+}
+
+.lang-en {
+  --color-brand: var(--brand-blue);
+  --color-brand-dark: #0f172a;
+  --color-brand-muted: rgba(17, 114, 186, 0.12);
+}
+
+.lang-am {
+  --color-brand: var(--brand-green);
+  --color-brand-dark: #012e1a;
+  --color-brand-muted: rgba(0, 105, 55, 0.12);
+}
+
+.lang-om, .lang-ti {
+  --color-brand: var(--brand-green);
+  --color-brand-dark: #012e1a;
+  --color-brand-muted: rgba(0, 105, 55, 0.12);
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand: var(--color-brand);
+  --color-brand-dark: var(--color-brand-dark);
+  --color-accent: var(--color-accent);
+  --color-brand-muted: var(--color-brand-muted);
+}
+
+@utility selection-brand {
+  &::selection {
+    background-color: var(--color-brand);
+    color: white;
+  }
+}
+
+/* Glass effect for overlays */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-dark {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
