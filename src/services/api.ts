@@ -1,4 +1,5 @@
 import { Report, User, UserRole } from '../types';
+import { CATEGORIES, INDUSTRIES, DEPARTMENTS } from '../constants';
 
 const API_BASE = '/api';
 
@@ -32,11 +33,15 @@ export const apiService = {
 
   // Reports
   async getReports(): Promise<Report[]> {
-    const res = await fetch(`${API_BASE}/reports`, {
-      headers: getHeaders()
-    });
-    if (!res.ok) throw new Error('Failed to fetch reports');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/reports`, {
+        headers: getHeaders()
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('Could not fetch reports from server');
+    }
+    return [];
   },
 
   async getReportByTrackingId(trackingId: string): Promise<Report> {
@@ -68,19 +73,31 @@ export const apiService = {
 
   // Stats
   async getStats(): Promise<any> {
-    const res = await fetch(`${API_BASE}/stats`, {
-      headers: getHeaders()
-    });
-    if (!res.ok) throw new Error('Failed to fetch stats');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/stats`, {
+        headers: getHeaders()
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {
+      console.warn('Could not fetch stats from server');
+    }
+    return { total: 0, pending: 0, investigating: 0, resolved: 0, trends: [], byCategory: [], byLocation: [] };
   },
 
-  // Configuration Items
+  // Configuration Items with automatic fallback to constants
   async getCategories(): Promise<any[]> {
-    const res = await fetch(`${API_BASE}/categories`);
-    if (!res.ok) throw new Error('Failed to fetch categories');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/categories`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) return data;
+      }
+    } catch (e) {
+      console.warn('Using local fallback for categories');
+    }
+    return CATEGORIES.map((name, i) => ({ id: i + 1, name }));
   },
+
   async addCategory(data: any): Promise<void> {
     const res = await fetch(`${API_BASE}/categories`, {
       method: 'POST',
@@ -91,10 +108,18 @@ export const apiService = {
   },
 
   async getIndustries(): Promise<any[]> {
-    const res = await fetch(`${API_BASE}/industries`);
-    if (!res.ok) throw new Error('Failed to fetch industries');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/industries`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) return data;
+      }
+    } catch (e) {
+      console.warn('Using local fallback for industries');
+    }
+    return INDUSTRIES.map((name, i) => ({ id: i + 1, name }));
   },
+
   async addIndustry(data: any): Promise<void> {
     const res = await fetch(`${API_BASE}/industries`, {
       method: 'POST',
@@ -105,10 +130,18 @@ export const apiService = {
   },
 
   async getDepartments(): Promise<any[]> {
-    const res = await fetch(`${API_BASE}/departments`);
-    if (!res.ok) throw new Error('Failed to fetch departments');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/departments`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) return data;
+      }
+    } catch (e) {
+      console.warn('Using local fallback for departments');
+    }
+    return DEPARTMENTS.map((name, i) => ({ id: i + 1, name }));
   },
+
   async addDepartment(data: any): Promise<void> {
     const res = await fetch(`${API_BASE}/departments`, {
       method: 'POST',
